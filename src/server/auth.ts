@@ -6,7 +6,7 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
-import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 
 import { env } from "~/env";
@@ -50,9 +50,9 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
     }),
     EmailProvider({
       server: {
@@ -75,6 +75,12 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  theme: {
+    colorScheme: "dark", // "auto" | "dark" | "light"
+    brandColor: "#346df1", // Hex color code
+    logo: "/icon.png", // Absolute URL to image
+    buttonText: "#fff" // Hex color code for button text
+  },
 };
 
 /**

@@ -1,5 +1,5 @@
 import { signIn, signOut, useSession } from "next-auth/react"
-import { userRouter } from "~/server/api/routers/getCredits";
+import Image from "next/image";
 import { api } from "~/utils/api";
 export default function NavBar(){
     const { data: sessionData } = useSession();
@@ -11,7 +11,12 @@ export default function NavBar(){
                     <nav className="container max-w-5xl flex items-center justify-between px-8 py-4 mx-auto" aria-label="Global">
                     <div className="flex lg:flex-1">
                         <a className="flex items-center gap-2 shrink-0" title="CartoonTrait Home Page" href="/">
-                        <img alt="Zenvoice logo" width="32" height="32" decoding="async" data-nimg="1" className="w-6 md:w-7"  />
+                        <Image
+                            src="/icon.png"
+                            width={32}
+                            height={32}
+                            alt="logo"
+                        />
                         <span className="font-extrabold text-lg">CartoonTrait</span>
                         </a>
                     </div>
