@@ -2,7 +2,6 @@ import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import { Inter } from "next/font/google";
-
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
