@@ -1,8 +1,14 @@
 import { signIn, signOut, useSession } from "next-auth/react"
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { api } from "~/utils/api";
 export default function NavBar(){
+    const router = useRouter();
+
+    const handleAddBalanceClick = () => {
+        router.push('/dank'); // Redirects to the /dank page
+    };
     const { data: sessionData } = useSession();
     const balance = api.credits.getCredits.useQuery();
 
@@ -39,11 +45,15 @@ export default function NavBar(){
                     <div className="hidden lg:flex lg:justify-center lg:gap-12 lg:items-center">
                         <a className="link link-hover" title="Pricing" href="/#pricing">Pricing</a>
                         <a className="link link-hover" title="FAQ" href="/#faq">FAQ</a>
-                        <a className="link link-hover" title="FAQ" href="/#faq">Add Balance</a>
-                        <p>{sessionData && `Balance: $${balance.data}`}</p>
                     </div>
                     <div className="hidden lg:flex lg:justify-end lg:flex-1">
-                        <button className="btn btn-sm" onClick={sessionData ? () => void signOut() : () => void signIn()}> {sessionData ? "Sign out" : "Sign in"}</button>
+                        <p className="mr-4 mt-1">{sessionData && `Balance: $${balance.data}`}</p>
+                        {sessionData && (
+                            <button className="btn btn-sm mr-4 bg-sky-500/75 hover:bg-sky-700/75" onClick={handleAddBalanceClick}>
+                                Add Balance
+                            </button>
+                        )}
+                        <button className="btn btn-sm " onClick={sessionData ? () => void signOut() : () => void signIn()}> {sessionData ? "Sign out" : "Sign in"}</button>
                     </div>
                     </nav>
                     <div className={`relative z-50 ${mobileOpen ? '' : 'hidden'}`}>
@@ -76,7 +86,7 @@ export default function NavBar(){
                             </div>
                             <div className="border-b my-4"></div>
                             <div className="flex flex-col gap-4">
-                                <button className="btn btn-secondary btn-block group !btn-block !btn-sm" onClick={sessionData ? () => void signOut() : () => void signIn()}> {sessionData ? "Sign out" : "Sign in"}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-lock"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+                                <button className="btn btn-secondary btn-block group !btn-block !btn-sm" onClick={sessionData ? () => void signOut() : () => void signIn()}> {sessionData ? "Sign out" : "Sign in"}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-lock"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
                             </div>
                             </div>
                         </div>
