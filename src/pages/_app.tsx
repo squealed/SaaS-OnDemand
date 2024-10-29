@@ -19,7 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <main data-theme="dracula" className={`font-sans ${inter.variable}`}>
+      <main className={`font-sans ${inter.variable}`}>
         <NavBar/>
         <Component {...pageProps} />
         <Footer/>

@@ -75,6 +75,13 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  pages: {
+    signIn: '/login',
+    signOut: '/auth/signout',
+    error: '/auth/error', // Error code passed in query string as ?error=
+    verifyRequest: '/auth/verify-request', // (used for check email message)
+    newUser: '/auth/new-user'
+  },
   theme: {
     colorScheme: "dark", // "auto" | "dark" | "light"
     brandColor: "#346df1", // Hex color code
