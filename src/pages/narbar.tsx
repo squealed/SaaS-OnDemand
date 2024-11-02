@@ -1,28 +1,14 @@
 import { signIn, signOut, useSession } from "next-auth/react"
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useState } from "react";
 import { api } from "~/utils/api";
 
 import { Palette } from "lucide-react";
 
 export default function NavBar(){
-    const router = useRouter();
-
-    const handleAddBalanceClick = () => {
-        router.push('/addbalance'); // Redirects to the /dank page
-    };
     const { data: sessionData } = useSession();
     if (sessionData){
       const balance = api.credits.getCredits.useQuery();
     }
-
-    const [ mobileOpen, mobileStatus] = useState(false);
-
-    const openMenu = () =>{
-        mobileStatus(!mobileOpen);
-    }
-
     return (
         <nav className="fixed top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
           <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 md:px-8">
