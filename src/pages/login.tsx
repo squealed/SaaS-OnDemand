@@ -17,7 +17,7 @@ export default function SignIn() {
   const router = useRouter()
 
   useEffect(()=>{
-    if(status == "authenticated"){
+    if(status === "authenticated"){
       router.push("/")
     }
   }), [status, router]
