@@ -62,7 +62,9 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
-    balance       Int       @default(0)
+    balance       Decimal    @default(0.0) // Change to Decimal
+
+    @@index([balance])
 }
 
 model VerificationToken {

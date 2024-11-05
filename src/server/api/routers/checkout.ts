@@ -1,44 +1,36 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import stripe from "stripe"
-import axios from "axios"
-import prisma from "@prisma/client";
+import Stripe from "stripe"
+import { env } from "~/env.js";
 import { z } from "zod"
+
+const stripe = new Stripe(env.STRIPE_PRIVATE_KEY)
+
 export const checkoutRouter = createTRPCRouter({
-    generateImage : protectedProcedure.input(
-        z.object({
-            amount: z.string(),
-        })
-    ).mutation(async ({ctx, input}) =>{
-        /*
-        let count = await ctx.db.user.updateMany({
-          where: {
-            id: ctx.session.user.id,
-            balance: {
-              gte: 1,
-            },
-          },
-          data: {
-            balance: {
-              decrement: 1,
-            }
-          }
-        })
-        */
-        console.log("We are here", )
-        /*
-        const response = await axios.post('https://api.openai.com/v1/images/generations', {
-            prompt: input.prompt,
-            image: input.image,  // Use the base64 image directly in the payload
-          }, {
-            headers: {
-              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-              'Content-Type': 'application/json'
-            }
-          });
-          */
-        //console.log(response.data)
-        return {
-            message: "success"
-        }
+  createCheckout : protectedProcedure.input(
+    z.object({
+      price: z.number().min(1, "Price must be at least 1 cent"), // Use cents to avoid decimals
     })
+    ).mutation(async ({ctx, input}) =>{
+      return stripe.checkout.sessions.create({
+        payment_method_types: ["card", "cashapp", "us_bank_account"],
+        metadata: {
+          userId: ctx.session.user.id,
+        },
+        success_url: `${env.NEXTAUTH_URL}`,
+        cancel_url: `${env.NEXTAUTH_URL}`,
+        line_items: [
+          {
+            price_data: {
+              currency: "usd", // Specify currency
+              product_data: {
+                name: "Custom Product",
+              },
+              unit_amount: input.price, // Amount in cents
+            },
+            quantity: 1,
+          },
+        ],
+        mode: "payment"
+      })
+  })
 })
