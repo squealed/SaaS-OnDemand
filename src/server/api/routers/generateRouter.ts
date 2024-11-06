@@ -1,16 +1,19 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import axios from "axios"
-import prisma from "@prisma/client";
 import { z } from "zod"
+import OpenAI from "openai";
+import axios from "axios";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 export const generateRouter = createTRPCRouter({
     generateImage : protectedProcedure.input(
         z.object({
-            prompt: z.string(),
             image: z.string()
         })
     ).mutation(async ({ctx, input}) =>{
-        /*
-        let count = await ctx.db.user.updateMany({
+      try{
+        await ctx.db.user.updateMany({
           where: {
             id: ctx.session.user.id,
             balance: {
@@ -19,26 +22,57 @@ export const generateRouter = createTRPCRouter({
           },
           data: {
             balance: {
-              decrement: 1,
+              decrement: .5,
             }
           }
         })
-        */
-        console.log("We are here",input.prompt, input.image)
-        /*
-        const response = await axios.post('https://api.openai.com/v1/images/generations', {
-            prompt: input.prompt,
-            image: input.image,  // Use the base64 image directly in the payload
-          }, {
-            headers: {
-              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-              'Content-Type': 'application/json'
-            }
-          });
-          */
-        //console.log(response.data)
-        return {
-            message: "success"
+        const options = {
+          method: 'POST',
+          url: 'https://modelslab.com/api/v6/realtime/img2img',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: {
+            key: process.env.OPENAI_API_KEY,
+            base64: true,
+            instant_response: true,
+            prompt: "Turn this image and its attributes into a cartoon",
+            negative_prompt: "bad quality",
+            init_image: input.image,
+            width: "512",
+            height: "512",
+            samples: "1",
+            temp: false,
+            safety_checker: false,
+            strength: 0.7,
+            seed: null,
+            webhook: null,
+            track_id: null
+          }
+        };
+
+        let response = await axios(options)
+
+
+        await new Promise((resolve) => setTimeout(resolve, 3 * 1000));
+
+        if (response.data.status === "processing"){
+
+          console.log(response.data.future_links[0])
+          let link = response.data.future_links[0]
+          console.log(link)
+
+          let base64data = await axios.get(link)
+
+          console.log(base64data.data)
+          return base64data.data;
+
         }
+
+      }catch(err){
+        return {
+          message: "fail"
+        }
+      }
     })
 })

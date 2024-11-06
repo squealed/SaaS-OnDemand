@@ -27,6 +27,7 @@ export const env = createEnv({
     OPENAI_API_KEY: z.string(),
     STRIPE_PRIVATE_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
+    REPLICATE_API_TOKEN: z.string(),
   },
 
   /**
@@ -54,6 +55,7 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PUB_KEY: process.env.NEXT_PUBLIC_STRIPE_PUB_KEY,
     STRIPE_PRIVATE_KEY: process.env.STRIPE_PRIVATE_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    REPLICATE_API_TOKEN: process.env.REPLICATE_API_TOKEN,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
