@@ -28,7 +28,7 @@ export const generateRouter = createTRPCRouter({
         })
         const options = {
           method: 'POST',
-          url: 'https://modelslab.com/api/v6/realtime/img2img',
+          url: 'https://modelslab.com/api/v6/images/img2img',
           headers: {
             'Content-Type': 'application/json'
           },
@@ -36,7 +36,7 @@ export const generateRouter = createTRPCRouter({
             key: process.env.OPENAI_API_KEY,
             base64: true,
             instant_response: true,
-            prompt: "Turn this image and its attributes into a cartoon",
+            prompt: "Turn this image into a cartoon",
             negative_prompt: "bad quality",
             init_image: input.image,
             width: "512",
@@ -54,7 +54,7 @@ export const generateRouter = createTRPCRouter({
         let response = await axios(options)
 
 
-        await new Promise((resolve) => setTimeout(resolve, 3 * 1000));
+        await new Promise((resolve) => setTimeout(resolve, 8 * 1000));
 
         if (response.data.status === "processing"){
 
